@@ -1,10 +1,11 @@
-package main
+package core
 
 import (
 	"fmt"
 	"math/rand"
 	"net/http"
 )
+
 
 type Carta struct {
 	naipe string
@@ -53,26 +54,11 @@ func (pm *PokerManager) darCartas(qtde int)  []Carta {
 	return cartas
 }
 
-func handlerDeck(resp http.ResponseWriter, req *http.Request) {
+func HandlerDeck(resp http.ResponseWriter, req *http.Request) {
 	pm := PokerManager{}
 	pm.inicializaDeck()
 
 	fmt.Println(pm)
 
 	fmt.Fprintf(resp, "Inicializando o deck")
-}
-
-func main() {
-	fmt.Println("Subindo servidor...")
-
-	http.HandleFunc("/api/poker", func(response http.ResponseWriter, request *http.Request) {
-		fmt.Fprintf(response, "Hello")
-	})
-
-	http.HandleFunc("/api/poker/deck/init", handlerDeck)
-
-	er := http.ListenAndServe("localhost:8080", nil)
-	if er != nil {
-		fmt.Printf("Erro %s", er.Error())
-	}
 }

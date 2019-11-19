@@ -1,4 +1,4 @@
-package pokerutil
+package core
 
 import (
 	"sort"
