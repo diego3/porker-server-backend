@@ -2,54 +2,64 @@ package core
 
 import (
 	"fmt"
-	"math/rand"
 	"net/http"
 )
 
 
 type Carta struct {
 	naipe string
+	codigo string
 	valor int
 }
 
 type PokerManager struct {
-	deck 		 []Carta // TODO deve ser uma stack
-	deckSorteado []Carta // cartas já sorteadas
+	stack 		 Stack
+	deck 		 []Carta
 }
 
 func (pm *PokerManager) inicializaDeck() {
-	naipes := []string{"S", "P", "O", "V"}// Espadas, Paus, Ouro, Valete
+	naipes := []string{"C", "D", "H", "S"}// Inicias em inglês dos naipes, TODO pesquisar legendas
 	for _, v := range naipes {
-		fmt.Printf("Simbol %s", v)
-		var i int
-		for i=2; i<=13; i++ {
-			naipe := v
-			switch i {
-			case 11:
-				naipe = "J"
-			case 12:
-				naipe = "Q"
-			case 13:
-				naipe = "K"
-			}
+		for i := 2; i<=10; i++ {
+			pm.deck = append(pm.deck, Carta{v, string(i), i})
+		}
+	}
 
-			pm.deck = append(pm.deck, Carta{naipe, i})
+	for _, v := range naipes {
+		for i := 11; i<=14; i++ {
+			// J = 11, Q = 12, K = 13, A = 14
+			pm.deck = append(pm.deck, Carta{v, string(i), i})
 		}
 	}
 	fmt.Printf("Deck inicializado len: %d", len(pm.deck))
 }
 
 // todo, shuffle method ser chamado após a inicialização
+func (pm *PokerManager) suffleDeck() {
+	//rand.Seed(52)
+	//var numero int = rand.Int()
+
+	numbers := make([]int, 52)
+	for i:=1; i <= 52; i++ {
+		numbers = append(numbers, i)
+	}
+
+	// TODO array shuffle
+
+	// TODO add shuffled array to stack
+
+}
 
 // dar cartas deve ser com uma stack, só ir fazendo pop
 func (pm *PokerManager) darCartas(qtde int)  []Carta {
-	// aleatoriamente sorteia uma carta do deck
-	rand.Seed(52)
 	var cartas []Carta
+	if pm.stack.Empty() {
+		return cartas
+	}
+
 	for i:=0; i < qtde; i++ {
-		var numero int = rand.Int()
-		fmt.Printf("Random number: %d", numero)
-		cartas = append(cartas, pm.deck[numero])
+		position, _ := pm.stack.Pop()
+		cartas = append(cartas, pm.deck[position])
 	}
 	return cartas
 }
