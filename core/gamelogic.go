@@ -3,6 +3,8 @@ package core
 import (
 	"fmt"
 	"net/http"
+	"math/rand"
+	"time"
 )
 
 
@@ -36,18 +38,21 @@ func (pm *PokerManager) inicializaDeck() {
 
 // todo, shuffle method ser chamado após a inicialização
 func (pm *PokerManager) suffleDeck() {
-	//rand.Seed(52)
-	//var numero int = rand.Int()
-
 	numbers := make([]int, 52)
 	for i:=1; i <= 52; i++ {
 		numbers = append(numbers, i)
 	}
 
-	// TODO array shuffle
+	// array shuffle
+	rand.Seed(time.Now().Unix())
+	rand.Shuffle(len(numbers), func(i, j int) {
+		numbers[i], numbers[j] = numbers[i], numbers[j]
+	})
 
-	// TODO add shuffled array to stack
-
+	// add shuffled array to stack
+	for _, val := range numbers {
+		pm.stack.Push(val)
+	}
 }
 
 // dar cartas deve ser com uma stack, só ir fazendo pop
@@ -59,7 +64,7 @@ func (pm *PokerManager) darCartas(qtde int)  []Carta {
 
 	for i:=0; i < qtde; i++ {
 		position, _ := pm.stack.Pop()
-		cartas = append(cartas, pm.deck[position])
+		cartas = append(cartas, pm.deck[position-1])
 	}
 	return cartas
 }
