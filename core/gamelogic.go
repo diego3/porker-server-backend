@@ -2,49 +2,53 @@ package core
 
 import (
 	"fmt"
-	"net/http"
 	"math/rand"
+	"net/http"
+	"strconv"
 	"time"
 )
 
 
-type Carta struct {
-	naipe string
-	codigo string
-	valor int
+type Card struct {
+	naipe 	string
+	code 	string
+	value 	int
 }
 
 type PokerManager struct {
 	stack 		 Stack
-	deck 		 []Carta
+	deck 		 []Card
 }
 
-func (pm *PokerManager) inicializaDeck() {
+func (pm *PokerManager) InitDeck() {
 	naipes := []string{"C", "D", "H", "S"}// Inicias em inglês dos naipes, TODO pesquisar legendas
 	for _, v := range naipes {
 		for i := 2; i<=10; i++ {
-			pm.deck = append(pm.deck, Carta{v, string(i), i})
+			pm.deck = append(pm.deck, Card{v, strconv.Itoa(i), i})
 		}
 	}
 
+	coringas := []string{"J", "Q", "K", "A"}
 	for _, v := range naipes {
-		for i := 11; i<=14; i++ {
+		corVal := 10
+		for _, coringa := range coringas {
 			// J = 11, Q = 12, K = 13, A = 14
-			pm.deck = append(pm.deck, Carta{v, string(i), i})
+			corVal++
+			pm.deck = append(pm.deck, Card{v, coringa, corVal})
 		}
 	}
-	fmt.Printf("Deck inicializado len: %d", len(pm.deck))
+	fmt.Printf("Deck inicializado len: %d\n", len(pm.deck))
 }
 
-// todo, shuffle method ser chamado após a inicialização
-func (pm *PokerManager) suffleDeck() {
+//
+func (pm *PokerManager) ShuffleDeck() {
 	numbers := make([]int, 52)
 	for i:=1; i <= 52; i++ {
 		numbers = append(numbers, i)
 	}
 
-	// array shuffle
-	rand.Seed(time.Now().Unix())
+	// array shuffle https://programming.guide/go/shuffle-slice-array.html
+	rand.Seed(time.Now().UnixNano())
 	rand.Shuffle(len(numbers), func(i, j int) {
 		numbers[i], numbers[j] = numbers[i], numbers[j]
 	})
@@ -55,25 +59,31 @@ func (pm *PokerManager) suffleDeck() {
 	}
 }
 
-// dar cartas deve ser com uma stack, só ir fazendo pop
-func (pm *PokerManager) darCartas(qtde int)  []Carta {
-	var cartas []Carta
+// get qty of cards from the deck
+func (pm *PokerManager) GetCards(qty int)  []Card {
+	var cards []Card
 	if pm.stack.Empty() {
-		return cartas
+		return cards
 	}
 
-	for i:=0; i < qtde; i++ {
+	for i:=0; i < qty; i++ {
 		position, _ := pm.stack.Pop()
-		cartas = append(cartas, pm.deck[position-1])
+		cards = append(cards, pm.deck[position-1])
 	}
-	return cartas
+	return cards
 }
+
+func (pm *PokerManager) PrintDeck()  {
+	for _, v := range pm.deck {
+		fmt.Printf("{n:%s c:%s val:%d}\n", v.naipe, v.code, v.value)
+	}
+}
+
 
 func HandlerDeck(resp http.ResponseWriter, req *http.Request) {
 	pm := PokerManager{}
-	pm.inicializaDeck()
+	pm.InitDeck()
+	pm.ShuffleDeck()
 
-	fmt.Println(pm)
-
-	fmt.Fprintf(resp, "Inicializando o deck")
+	fmt.Fprintf(resp, "Stack %v", pm.stack)
 }

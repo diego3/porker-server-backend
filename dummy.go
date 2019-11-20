@@ -5,9 +5,7 @@ import (
 	"fmt"
 )
 
-
-func main() {
-
+func testStack() {
 	deck := core.Stack{}
 	deck.Push(10)
 	deck.Push(20)
@@ -17,4 +15,18 @@ func main() {
 	n, _ := deck.Pop()
 	fmt.Printf("pop %d\n", n)
 	fmt.Printf("pilha %v\n", deck)
+}
+
+func testGameLogic() {
+	fmt.Println("Testando gamelogic")
+	poker := core.PokerManager{}
+
+	poker.InitDeck()
+	fmt.Println("Deck inicializado, printando...")
+	poker.PrintDeck()
+}
+
+func main() {
+
+	testGameLogic()
 }
