@@ -42,16 +42,19 @@ func (pm *PokerManager) InitDeck() {
 
 //
 func (pm *PokerManager) ShuffleDeck() {
-	numbers := make([]int, 52)
+	var numbers []int
 	for i:=1; i <= 52; i++ {
 		numbers = append(numbers, i)
 	}
+	fmt.Println(numbers)
 
 	// array shuffle https://programming.guide/go/shuffle-slice-array.html
 	rand.Seed(time.Now().UnixNano())
 	rand.Shuffle(len(numbers), func(i, j int) {
-		numbers[i], numbers[j] = numbers[i], numbers[j]
+		numbers[i], numbers[j] = numbers[j], numbers[i]
 	})
+	fmt.Println("Shuffed numbers")
+	fmt.Println(numbers)
 
 	// add shuffled array to stack
 	for _, val := range numbers {

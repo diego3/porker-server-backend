@@ -22,8 +22,13 @@ func testGameLogic() {
 	poker := core.PokerManager{}
 
 	poker.InitDeck()
-	fmt.Println("Deck inicializado, printando...")
-	poker.PrintDeck()
+	poker.ShuffleDeck()
+	//fmt.Println("printando deck")
+	//poker.PrintDeck()
+
+	fmt.Println("Tentando puxar 2 cartas do deck..")
+	cards := poker.GetCards(2)
+	fmt.Println(cards)
 }
 
 func main() {
