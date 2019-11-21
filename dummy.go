@@ -19,16 +19,24 @@ func testStack() {
 
 func testGameLogic() {
 	fmt.Println("Testando gamelogic")
-	poker := core.PokerManager{}
+	deck := core.Deck{}
 
-	poker.InitDeck()
-	poker.ShuffleDeck()
-	//fmt.Println("printando deck")
-	//poker.PrintDeck()
+	deck.Init()
+
 
 	fmt.Println("Tentando puxar 2 cartas do deck..")
-	cards := poker.GetCards(2)
+	cards := deck.GetCards(2)
 	fmt.Println(cards)
+
+	fmt.Println("printando deck")
+	deck.Print()
+
+	fmt.Println("Tentando puxar 2 cartas do deck..")
+	cards2 := deck.GetCards(2)
+	fmt.Println(cards2)
+
+	fmt.Println("printando deck")
+	deck.Print()
 }
 
 func main() {

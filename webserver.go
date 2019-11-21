@@ -6,19 +6,29 @@ import (
 	"net/http"
 )
 
+var (
+	// TODO map com route to method ex. {"/api/deck": core.ApiDeck}
+	routes = []string{
+		"/api",
+		"/api/cards",
+	}
+)
 
 func main() {
-	fmt.Println("Subindo servidor...")
+	fmt.Println("Subindo servidor: localhost:8080")
 
-	http.HandleFunc("/api/poker", func(response http.ResponseWriter, request *http.Request) {
-		fmt.Fprintf(response, "Hello")
+	for _, route := range routes {
+		fmt.Printf("route: %s", route)
+	}
+
+	http.HandleFunc("/api/poker", func(resp http.ResponseWriter, req *http.Request) {
+		_, _ = fmt.Fprintf(resp, "Hello")
 	})
 
-	http.HandleFunc("/api/poker/deck/init", core.HandlerDeck)
+	http.HandleFunc("/api/poker/deck/dealer", core.DealerCards)
 
 	er := http.ListenAndServe("localhost:8080", nil)
 	if er != nil {
 		fmt.Printf("Erro %s", er.Error())
 	}
-
 }

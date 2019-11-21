@@ -13,6 +13,14 @@ func (s *Stack) Empty() bool {
 	return len(s.items) == 0
 }
 
+func (s *Stack) Size() int {
+	return len(s.items)
+}
+
+func (s *Stack) Clear() {
+	s.items = []int{}
+}
+
 func (s *Stack) Pop() (int, error) {
 	if s.Empty() {
 		return -1, nil
