@@ -1,4 +1,4 @@
-package main
+package rest
 
 import (
 	"awesomeProject/core"
@@ -22,7 +22,7 @@ func main() {
 	}
 
 	http.HandleFunc("/api/poker", func(resp http.ResponseWriter, req *http.Request) {
-		_, _ = fmt.Fprintf(resp, "Hello")
+		_, _ = fmt.Fprintf(resp, "Contador")
 	})
 
 	http.HandleFunc("/api/poker/deck/dealer", core.DealerCards)
